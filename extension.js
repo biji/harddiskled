@@ -56,8 +56,9 @@ function parseStat() {
         while (line = dstream.read_line(null)) {
             line = String(line);
             let fields = line.split(/\W+/);
+            if (fields.length<=2) break;
+
             if (parseInt(fields[2]) === 0 && parseInt(fields[4]) !== 0) {
-                ioSpeed.set_text(fields[3]);
                 count = count + parseInt(fields[6]) + parseInt(fields[10]);
                 break;
             }
@@ -101,12 +102,9 @@ function parseStat() {
 }
 
 function speedToString(amount) {
-    let digits = 2;
+    let digits = 3;
     if (amount === 0)
         return "0 B/s";
-    if (digits < 3)
-        digits = 3;
-    // amount *= 1000;
 
     let unit = 0;
     while (amount >= 1000) { // 1M=1024K, 1MB/s=1000MB/s
