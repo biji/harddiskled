@@ -7,7 +7,7 @@ const Mainloop = imports.mainloop;
 // const GLib = imports.gi.GLib;
 
 
-let button, timeout;
+let button, layoutManager, timeout;
 // let icon, iconDark;
 let cur;
 let ioSpeed;
@@ -16,14 +16,19 @@ let lastCount, lastSpeed;
 const refreshTime = 3.0;
 
 function init() {
+
     button = new St.Bin({
-        style_class: 'panel-button',
+        style_class: 'harddiskled-panel-button',
         reactive: true,
         can_focus: true,
         x_fill: true,
         y_fill: false,
         track_hover: true
     });
+
+	layoutManager = new St.BoxLayout({
+        vertical: false,
+		style_class: 'harddiskled-container'});
 
     /*
     icon = new St.Icon({
@@ -35,11 +40,19 @@ function init() {
 
     ioSpeed = new St.Label({
         text: '---',
-        style_class: 'iospeed-label'
+        style_class: 'harddiskled-label'
     });
 
-    button.set_child(ioSpeed);
+    ioSpeedIcon = new St.Label({
+        text: '',
+        style_class: 'harddiskled-icon'
+    });
+
+    layoutManager.add(ioSpeedIcon);
+    layoutManager.add(ioSpeed);
     //button.connect('button-press-event', _showHello);
+
+    button.set_child(layoutManager);
 
     cur = 0;
     lastCount = 0;
@@ -71,10 +84,11 @@ function parseStat() {
 
         let dot = "";
         if (speed > lastSpeed) {
-            dot = "💾 ";
+            dot = "☢";
         }
 
-        ioSpeed.set_text(dot + speedToString(speed));
+        ioSpeedIcon.set_text(dot);
+        ioSpeed.set_text(speedToString(speed));
 
         lastCount = count;
         lastSpeed = speed;
@@ -104,7 +118,7 @@ function parseStat() {
 function speedToString(amount) {
     let digits = 3;
     if (amount === 0)
-        return "0 B/s";
+        return "0B/s";
 
     let unit = 0;
     while (amount >= 1000) { // 1M=1024K, 1MB/s=1000MB/s
@@ -112,11 +126,13 @@ function speedToString(amount) {
         ++unit;
     }
 
-    if (amount >= 100)
+    if (amount > 100)
+        digits -= 3;
+    else if (amount >= 100)
         digits -= 2;
     else if (amount >= 10)
         digits -= 1;
-    let speed_map = [" B/s", " K/s", " M/s", " G/s"];
+    let speed_map = ["B/s", "K/s", "M/s", "G/s", "T/s"];
     return String(amount.toFixed(digits - 1)) + speed_map[unit];
 }
 

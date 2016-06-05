@@ -1,5 +1,22 @@
-.iospeed-label {
+.harddiskled-label {
     font-size: 12px;
-    width: 80px;
+    width: 45px;
+    height: 14px;
     text-align: right;
 }
+
+.harddiskled-icon {
+    font-size: 14px;
+    width: 16px;
+    height: 14px;
+    text-align: left;
+    color: lime;
+}
+
+.harddiskled-container {
+    spacing: 0px;
+}
+
+.harddiskled-panel-button {
+}
+
