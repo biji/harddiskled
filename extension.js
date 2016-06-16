@@ -82,9 +82,9 @@ function parseStat() {
 
         let speed = (count - lastCount) / refreshTime * 512;
 
-        let dot = "";
+        let dot = "◯";
         if (speed > lastSpeed) {
-            dot = "☢";
+            dot = "⬤";
         }
 
         ioSpeedIcon.set_text(dot);
