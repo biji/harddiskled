@@ -7,18 +7,18 @@ const Mainloop = imports.mainloop;
 // const GLib = imports.gi.GLib;
 
 
-let button, layoutManager, timeout;
+let button, timeout;
 // let icon, iconDark;
 let cur;
 let ioSpeed;
 let lastCount, lastSpeed;
+let mode = 0;
 
 const refreshTime = 3.0;
 
 function init() {
-
     button = new St.Bin({
-        style_class: 'harddiskled-panel-button',
+        style_class: 'panel-button',
         reactive: true,
         can_focus: true,
         x_fill: true,
@@ -26,9 +26,9 @@ function init() {
         track_hover: true
     });
 
-	layoutManager = new St.BoxLayout({
+    layoutManager = new St.BoxLayout({
         vertical: false,
-		style_class: 'harddiskled-container'});
+        style_class: 'harddiskled-container'});
 
     /*
     icon = new St.Icon({
@@ -38,9 +38,19 @@ function init() {
         gicon: Gio.icon_new_for_string(Me.path + "/icons/harddisk-dark.svg")
     });*/
 
+    ioSpeedStaticIcon = new St.Icon({
+        style_class: 'system-status-icon',
+        gicon: Gio.icon_new_for_string('drive-harddisk-symbolic')
+    });
+
     ioSpeed = new St.Label({
         text: '---',
         style_class: 'harddiskled-label'
+    });
+
+    ioSpeedStaticIconx = new St.Label({
+        text: '💾',
+        style_class: 'harddiskled-static-icon'
     });
 
     ioSpeedIcon = new St.Label({
@@ -48,14 +58,23 @@ function init() {
         style_class: 'harddiskled-icon'
     });
 
+    layoutManager.add(ioSpeedStaticIcon);
     layoutManager.add(ioSpeedIcon);
     layoutManager.add(ioSpeed);
-    //button.connect('button-press-event', _showHello);
+    button.connect('button-press-event', changeMode);
 
     button.set_child(layoutManager);
 
     cur = 0;
     lastCount = 0;
+}
+
+function changeMode() {
+    mode++;
+    if (mode > 1) {
+        mode = 0;
+    }
+    parseStat();
 }
 
 function parseStat() {
@@ -82,9 +101,9 @@ function parseStat() {
 
         let speed = (count - lastCount) / refreshTime * 512;
 
-        let dot = "◯";
-        if (speed > lastSpeed) {
-            dot = "⬤";
+        let dot = " ";
+        if (mode != 1 && speed > lastSpeed) {
+            dot = "●";
         }
 
         ioSpeedIcon.set_text(dot);
@@ -117,8 +136,11 @@ function parseStat() {
 
 function speedToString(amount) {
     let digits = 3;
+    let speed_map;
+    speed_map = ["B/s", "K/s", "M/s", "G/s"];
+
     if (amount === 0)
-        return "0B/s";
+        return "0"  + speed_map[0];
 
     let unit = 0;
     while (amount >= 1000) { // 1M=1024K, 1MB/s=1000MB/s
@@ -132,7 +154,6 @@ function speedToString(amount) {
         digits -= 2;
     else if (amount >= 10)
         digits -= 1;
-    let speed_map = ["B/s", "K/s", "M/s", "G/s", "T/s"];
     return String(amount.toFixed(digits - 1)) + speed_map[unit];
 }
 

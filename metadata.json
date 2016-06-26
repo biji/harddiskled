@@ -1,10 +1,10 @@
 {
-  "description": "Show harddisk activity (IO speed read/write and LED).", 
-  "name": "Harddisk LED", 
+  "description": "Show harddisk activity (IO speed read/write and LED).",
+  "name": "Harddisk LED",
   "shell-version": [
-    "3.24","3.22","3.20","3.18","3.16","3.14"
-  ], 
-  "url": "https://github.com/biji/harddiskled", 
-  "uuid": "harddiskled@bijidroid.gmail.com", 
-  "version": 10
+    "3.26","3.24","3.22","3.20","3.18","3.16","3.14"
+  ],
+  "url": "https://github.com/biji/harddiskled",
+  "uuid": "harddiskled@bijidroid.gmail.com",
+  "version": 11
 }
