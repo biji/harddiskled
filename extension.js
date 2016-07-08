@@ -84,10 +84,10 @@ function changeMode() {
         mode = 0;
     }
     settings.set_int('mode', mode);
-    parseStat();
+    parseStat(true);
 }
 
-function parseStat(forceDot = true) {
+function parseStat(forceDot = false) {
     try {
         let input_file = Gio.file_new_for_path('/proc/diskstats');
         let fstream = input_file.read(null);
