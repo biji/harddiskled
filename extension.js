@@ -1,22 +1,31 @@
 const St = imports.gi.St;
 const Main = imports.ui.main;
 // const Tweener = imports.ui.tweener;
-// const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gio = imports.gi.Gio;
 const Mainloop = imports.mainloop;
 // const GLib = imports.gi.GLib;
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
 
+const PREFS_SCHEMA = 'org.gnome.shell.extensions.harddiskled';
+const refreshTime = 3.0;
+
+let settings;
 let button, timeout;
 // let icon, iconDark;
 let cur;
 let ioSpeed;
 let lastCount, lastSpeed;
-let mode = 0;
-
-const refreshTime = 3.0;
+let mode;
 
 function init() {
+
+    settings = Convenience.getSettings(PREFS_SCHEMA);
+
+    mode = settings.get_int('mode'); // default mode using bit (bps, kbps)
+
     button = new St.Bin({
         style_class: 'panel-button',
         reactive: true,
@@ -71,13 +80,14 @@ function init() {
 
 function changeMode() {
     mode++;
-    if (mode > 1) {
+    if (mode > 2) {
         mode = 0;
     }
+    settings.set_int('mode', mode);
     parseStat();
 }
 
-function parseStat() {
+function parseStat(forceDot = true) {
     try {
         let input_file = Gio.file_new_for_path('/proc/diskstats');
         let fstream = input_file.read(null);
@@ -102,8 +112,14 @@ function parseStat() {
         let speed = (count - lastCount) / refreshTime * 512;
 
         let dot = " ";
-        if (mode != 1 && speed > lastSpeed) {
-            dot = "●";
+        if (mode != 2) {
+            if (speed > lastSpeed || forceDot) {
+                if (mode == 0) {
+                    dot = "●";
+                } else if (mode == 1) {
+                    dot = "⬤";
+                }
+            }
         }
 
         ioSpeedIcon.set_text(dot);

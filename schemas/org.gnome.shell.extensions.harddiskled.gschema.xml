@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="harddiskled@bijidroid.gmail.com">
+  <schema path="/org/gnome/shell/extensions/harddiskled/" id="org.gnome.shell.extensions.harddiskled">
+      <key name="mode" type="i">
+        <range min="0" max="2" />
+        <default>0</default>
+      </key>
+  </schema>
+</schemalist>
