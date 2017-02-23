@@ -97,13 +97,19 @@ function parseStat(forceDot = false) {
         let line;
         while (line = dstream.read_line(null)) {
             line = String(line);
-            let fields = line.split(/\W+/);
+            let fields = line.split(/ +/);
             if (fields.length<=2) break;
 
-            if (parseInt(fields[2]) === 0 && parseInt(fields[4]) !== 0) {
+            if (parseInt(fields[2]) === 0 
+                    && fields[3].indexOf('md0') != 0
+                    && fields[3].indexOf('ram0') != 0
+                    && fields[3].indexOf('dm-0') != 0
+                    && fields[3].indexOf('zram0') != 0
+                    && fields[3].indexOf('loop0') != 0) {
                 count = count + parseInt(fields[6]) + parseInt(fields[10]);
-                break;
+                // log(fields[3] + ':' + fields[6] + ' ' + fields[10] + ' ' + count);
             }
+            
         }
         fstream.close(null);
 
