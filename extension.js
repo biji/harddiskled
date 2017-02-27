@@ -100,7 +100,7 @@ function parseStat(forceDot = false) {
             let fields = line.split(/ +/);
             if (fields.length<=2) break;
 
-            if (parseInt(fields[2]) === 0 
+            if (parseInt(fields[2])%16 === 0 
                     && fields[3].indexOf('md0') != 0
                     && fields[3].indexOf('ram0') != 0
                     && fields[3].indexOf('dm-0') != 0
