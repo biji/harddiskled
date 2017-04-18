@@ -10,7 +10,9 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
 const PREFS_SCHEMA = 'org.gnome.shell.extensions.harddiskled';
-const refreshTime = 3.0;
+const refreshTime = 2.0;
+
+const ledThreshold = 500000;
 
 let settings;
 let button, timeout;
@@ -80,7 +82,7 @@ function init() {
 
 function changeMode() {
     mode++;
-    if (mode > 2) {
+    if (mode > 4) {
         mode = 0;
     }
     settings.set_int('mode', mode);
@@ -118,14 +120,19 @@ function parseStat(forceDot = false) {
         let speed = (count - lastCount) / refreshTime * 512;
 
         let dot = " ";
-        if (mode != 2) {
-            if (speed > lastSpeed || forceDot) {
-                if (mode == 0) {
+        if (mode < 4) {
+            if (speed > lastSpeed || forceDot || speed > ledThreshold) {
+                if (mode == 0 || mode == 2) {
                     dot = "●";
-                } else if (mode == 1) {
+                } else if (mode == 1 || mode == 3) {
                     dot = "⬤";
                 }
             }
+        }
+        if (mode == 2 || mode == 3) {
+            ioSpeed.hide();
+        } else {
+            ioSpeed.show();
         }
 
         ioSpeedIcon.set_text(dot);
