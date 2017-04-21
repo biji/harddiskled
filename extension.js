@@ -13,6 +13,7 @@ const PREFS_SCHEMA = 'org.gnome.shell.extensions.harddiskled';
 const refreshTime = 2.0;
 
 const ledThreshold = 500000;
+const ledMinThreshold = 100000;
 
 let settings;
 let button, timeout;
@@ -122,10 +123,12 @@ function parseStat(forceDot = false) {
         let dot = " ";
         if (mode < 4) {
             if (speed > lastSpeed || forceDot || speed > ledThreshold) {
-                if (mode == 0 || mode == 2) {
-                    dot = "●";
-                } else if (mode == 1 || mode == 3) {
-                    dot = "⬤";
+                if (speed > ledMinThreshold) {
+                    if (mode == 0 || mode == 2) {
+                        dot = "●";
+                    } else if (mode == 1 || mode == 3) {
+                        dot = "⬤";
+                    }
                 }
             }
         }
