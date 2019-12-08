@@ -22,6 +22,10 @@ let cur;
 let ioSpeed;
 let lastCount, lastSpeed;
 let mode;
+let layoutManager;
+let ioSpeedStaticIcon;
+let ioSpeedStaticIconx;
+let ioSpeedIcon;
 
 function init() {
 
