@@ -1,3 +1,4 @@
+const Clutter = imports.gi.Clutter;
 const St = imports.gi.St;
 const Main = imports.ui.main;
 // const Tweener = imports.ui.tweener;
@@ -56,11 +57,13 @@ function init() {
 
     ioSpeedStaticIcon = new St.Icon({
         style_class: 'system-status-icon',
+        y_align: Clutter.ActorAlign.CENTER,
         gicon: Gio.icon_new_for_string('drive-harddisk-symbolic')
     });
 
     ioSpeed = new St.Label({
         text: '---',
+        y_align: Clutter.ActorAlign.CENTER,
         style_class: 'harddiskled-label'
     });
 
@@ -71,6 +74,7 @@ function init() {
 
     ioSpeedIcon = new St.Label({
         text: '',
+        y_align: Clutter.ActorAlign.CENTER,
         style_class: 'harddiskled-icon'
     });
 
