@@ -106,7 +106,7 @@ function parseStat(forceDot = false) {
 
         let count = 0;
         let line;
-        while (line = dstream.read_line(null)) {
+        while ((line = dstream.read_line(null))) {
             line = String(line);
             let fields = line.split(/ +/);
             if (fields.length<=2) break;
