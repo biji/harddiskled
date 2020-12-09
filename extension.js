@@ -89,13 +89,16 @@ function init() {
     lastCount = 0;
 }
 
-function changeMode() {
-    mode++;
-    if (mode > 4) {
-        mode = 0;
+function changeMode(data, event) {
+    // React only to right-clicks.
+    if (event.get_button() == 3) {
+        mode++;
+        if (mode > 4) {
+            mode = 0;
+        }
+        settings.set_int('mode', mode);
+        parseStat(true);
     }
-    settings.set_int('mode', mode);
-    parseStat(true);
 }
 
 function parseStat(forceDot = false) {
