@@ -8,7 +8,6 @@ const Mainloop = imports.mainloop;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
 
 const PREFS_SCHEMA = 'org.gnome.shell.extensions.harddiskled';
 const refreshTime = 2.0;
@@ -29,62 +28,6 @@ let ioSpeedStaticIconx;
 let ioSpeedIcon;
 
 function init() {
-
-    settings = Convenience.getSettings(PREFS_SCHEMA);
-
-    mode = settings.get_int('mode'); // default mode
-
-    button = new St.Button({
-        style_class: 'panel-button',
-        reactive: true,
-        can_focus: true,
-        x_expand: true,
-        y_expand: false,
-        track_hover: true
-    });
-
-    layoutManager = new St.BoxLayout({
-        vertical: false,
-        style_class: 'harddiskled-container'});
-
-    /*
-    icon = new St.Icon({
-        gicon: Gio.icon_new_for_string(Me.path + "/icons/harddisk.svg")
-    });
-    iconDark = new St.Icon({
-        gicon: Gio.icon_new_for_string(Me.path + "/icons/harddisk-dark.svg")
-    });*/
-
-    ioSpeedStaticIcon = new St.Icon({
-        style_class: 'system-status-icon',
-        y_align: Clutter.ActorAlign.CENTER,
-        gicon: Gio.icon_new_for_string('drive-harddisk-symbolic')
-    });
-
-    ioSpeed = new St.Label({
-        text: '---',
-        y_align: Clutter.ActorAlign.CENTER,
-        style_class: 'harddiskled-label'
-    });
-
-    ioSpeedStaticIconx = new St.Label({
-        text: '💾',
-        style_class: 'harddiskled-static-icon'
-    });
-
-    ioSpeedIcon = new St.Label({
-        text: '',
-        y_align: Clutter.ActorAlign.CENTER,
-        style_class: 'harddiskled-icon'
-    });
-
-    layoutManager.add(ioSpeedStaticIcon);
-    layoutManager.add(ioSpeedIcon);
-    layoutManager.add(ioSpeed);
-    button.connect('button-press-event', changeMode);
-
-    button.set_child(layoutManager);
-
     cur = 0;
     lastCount = 0;
 }
@@ -206,11 +149,68 @@ function speedToString(amount) {
 }
 
 function enable() {
+    settings = ExtensionUtils.getSettings(PREFS_SCHEMA);
+
+    mode = settings.get_int('mode'); // default mode
+
+    button = new St.Button({
+        style_class: 'panel-button',
+        reactive: true,
+        can_focus: true,
+        x_expand: true,
+        y_expand: false,
+        track_hover: true
+    });
+
+    layoutManager = new St.BoxLayout({
+        vertical: false,
+        style_class: 'harddiskled-container'});
+
+    /*
+    icon = new St.Icon({
+        gicon: Gio.icon_new_for_string(Me.path + "/icons/harddisk.svg")
+    });
+    iconDark = new St.Icon({
+        gicon: Gio.icon_new_for_string(Me.path + "/icons/harddisk-dark.svg")
+    });*/
+
+    ioSpeedStaticIcon = new St.Icon({
+        style_class: 'system-status-icon',
+        y_align: Clutter.ActorAlign.CENTER,
+        gicon: Gio.icon_new_for_string('drive-harddisk-symbolic')
+    });
+
+    ioSpeed = new St.Label({
+        text: '---',
+        y_align: Clutter.ActorAlign.CENTER,
+        style_class: 'harddiskled-label'
+    });
+
+    ioSpeedStaticIconx = new St.Label({
+        text: '💾',
+        style_class: 'harddiskled-static-icon'
+    });
+
+    ioSpeedIcon = new St.Label({
+        text: '',
+        y_align: Clutter.ActorAlign.CENTER,
+        style_class: 'harddiskled-icon'
+    });
+
+    layoutManager.add(ioSpeedStaticIcon);
+    layoutManager.add(ioSpeedIcon);
+    layoutManager.add(ioSpeed);
+    button.connect('button-press-event', changeMode);
+
+    button.set_child(layoutManager);
+
     Main.panel._rightBox.insert_child_at_index(button, 0);
     timeout = Mainloop.timeout_add_seconds(refreshTime, parseStat);
 }
 
 function disable() {
     Mainloop.source_remove(timeout);
+    timeout = null;
     Main.panel._rightBox.remove_child(button);
+    button.destroy();
 }
