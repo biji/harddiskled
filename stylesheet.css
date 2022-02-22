@@ -1,18 +1,12 @@
 .harddiskled-label {
     font-size: 1em;
-    width: 4em;
+    min-width: 4em;
     text-align: right;
 }
 
-/*.harddiskled-static-icon {
-    font-size: 14px;
-    width: 15px;
-    text-align: left;
-}*/
-
 .harddiskled-icon {
     font-size: 1em;
-    width: 1.2em;
+    min-width: 1.2em;
     text-align: center;
     color: lime;
 }

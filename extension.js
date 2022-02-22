@@ -32,9 +32,9 @@ function init() {
 
     settings = Convenience.getSettings(PREFS_SCHEMA);
 
-    mode = settings.get_int('mode'); // default mode using bit (bps, kbps)
+    mode = settings.get_int('mode'); // default mode
 
-    button = new St.Bin({
+    button = new St.Button({
         style_class: 'panel-button',
         reactive: true,
         can_focus: true,
@@ -91,7 +91,7 @@ function init() {
 
 function changeMode() {
     mode++;
-    if (mode > 4) {
+    if (mode > 5) {
         mode = 0;
     }
     settings.set_int('mode', mode);
@@ -129,14 +129,12 @@ function parseStat(forceDot = false) {
         let speed = (count - lastCount) / refreshTime * 512;
 
         let dot = " ";
-        if (mode < 4) {
-            if (speed > lastSpeed || forceDot || speed > ledThreshold) {
-                if (speed > ledMinThreshold) {
-                    if (mode == 0 || mode == 2) {
-                        dot = "●";
-                    } else if (mode == 1 || mode == 3) {
-                        dot = "⬤";
-                    }
+        if (speed > lastSpeed || forceDot || speed > ledThreshold) {
+            if (speed > ledMinThreshold) {
+                if (mode == 0 || mode == 2 || mode == 4) {
+                    dot = "●";
+                } else if (mode == 1 || mode == 3) {
+                    dot = "⬤";
                 }
             }
         }
@@ -144,6 +142,16 @@ function parseStat(forceDot = false) {
             ioSpeed.hide();
         } else {
             ioSpeed.show();
+        }
+        if (mode == 4 || mode == 5) {
+            ioSpeedStaticIcon.hide();
+        } else {
+            ioSpeedStaticIcon.show();
+        }
+        if (mode == 5) {
+            ioSpeedIcon.hide();
+        } else {
+            ioSpeedIcon.show();
         }
 
         ioSpeedIcon.set_text(dot);
