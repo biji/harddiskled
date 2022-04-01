@@ -25,6 +25,16 @@ let mode;
 let layoutManager;
 let ioSpeedStaticIcon;
 let ioSpeedIcon;
+let byteArrayToString;
+
+if (global.TextDecoder) {
+    // available in gjs >= 1.70 (GNOME Shell >= 42)
+    byteArrayToString = (new TextDecoder().decode);
+}
+else {
+    // gjs-specific
+    byteArrayToString = imports.byteArray.toString;
+}
 
 function init() {
     cur = 0;
@@ -48,8 +58,8 @@ function parseStat(forceDot = false) {
 
         let count = 0;
         let line;
-        while ((line = dstream.read_line(null))) {
-            line = String(line);
+        while (([line, len] = dstream.read_line(null)) != null && line != null) {
+            line = byteArrayToString(line);
             let fields = line.split(/ +/);
             if (fields.length<=2) break;
 
