@@ -53,17 +53,20 @@ function changeMode() {
 function parseStat(forceDot = false) {
     try {
         let input_file = Gio.file_new_for_path('/proc/diskstats');
-        let fstream = input_file.read(null);
-        let dstream = Gio.DataInputStream.new(fstream);
+
+        let [, contents, etag] = input_file.load_contents(null);
+        contents = byteArrayToString(contents);
+        let lines = contents.split('\n');
 
         let count = 0;
         let line;
-        while (([line, len] = dstream.read_line(null)) != null && line != null) {
-            line = byteArrayToString(line);
+
+        for (let i=0;i<lines.length;i++) {
+            line = lines[i];
             let fields = line.split(/ +/);
             if (fields.length<=2) break;
 
-            if (parseInt(fields[2])%16 === 0 
+            if (parseInt(fields[2])%16 === 0
                     && fields[3].indexOf('md0') != 0
                     && fields[3].indexOf('ram0') != 0
                     && fields[3].indexOf('dm-0') != 0
@@ -72,9 +75,8 @@ function parseStat(forceDot = false) {
                 count = count + parseInt(fields[6]) + parseInt(fields[10]);
                 // log(fields[3] + ':' + fields[6] + ' ' + fields[10] + ' ' + count);
             }
-            
+
         }
-        fstream.close(null);
 
         if (lastCount === 0) lastCount = count;
 
@@ -152,7 +154,7 @@ function speedToString(amount) {
         digits = 0;
     else if (amount >= 10) // 10MB 10.2
         digits = 1;
-    else 
+    else
         digits = 2;
     return String(amount.toFixed(digits)) + speed_map[unit];
 }
