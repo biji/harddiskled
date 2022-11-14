@@ -43,7 +43,7 @@ function init() {
 
 function changeMode() {
     mode++;
-    if (mode > 5) {
+    if (mode > 7) {
         mode = 0;
     }
     settings.set_int('mode', mode);
@@ -85,19 +85,19 @@ function parseStat(forceDot = false) {
         let dot = " ";
         if (speed > lastSpeed || forceDot || speed > ledThreshold) {
             if (speed > ledMinThreshold) {
-                if (mode == 0 || mode == 2 || mode == 4) {
+                if (mode == 0 || mode == 2 || mode == 4 || mode == 6 ) {
                     dot = "●";
-                } else if (mode == 1 || mode == 3) {
+                } else if (mode == 1 || mode == 3 || mode == 7 ) {
                     dot = "⬤";
                 }
             }
         }
-        if (mode == 2 || mode == 3) {
+        if (mode == 2 || mode == 3 || mode == 6 || mode == 7) {
             ioSpeed.hide();
         } else {
             ioSpeed.show();
         }
-        if (mode == 4 || mode == 5) {
+        if (mode == 4 || mode == 5 || mode == 6 || mode == 7) {
             ioSpeedStaticIcon.hide();
         } else {
             ioSpeedStaticIcon.show();
