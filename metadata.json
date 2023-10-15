@@ -3,17 +3,9 @@
   "description": "Show harddisk activity (IO speed read/write and LED). Click to change led size",
   "name": "Harddisk LED",
   "shell-version": [
-    "3.32",
-    "3.34",
-    "3.36",
-    "3.38",
-    "40",
-    "41",
-    "42",
-    "43",
-    "44"
+    "45"
   ],
   "url": "https://github.com/biji/harddiskled",
   "uuid": "harddiskled@bijidroid.gmail.com",
-  "version": 34
+  "version": 35
 }
