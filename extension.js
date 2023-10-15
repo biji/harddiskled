@@ -6,8 +6,6 @@ const Mainloop = imports.mainloop; // still using legacy imports (GNOME Shell < 
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 export default class HardDiskLEDExtension extends Extension {
-
-    PREFS_SCHEMA = 'org.gnome.shell.extensions.harddiskled';
     refreshTime = 2.0;
 
     ledThreshold = 500000;
@@ -159,7 +157,7 @@ export default class HardDiskLEDExtension extends Extension {
 
     enable() {
         this.init()
-        this.settings = this.getSettings(this.PREFS_SCHEMA);
+        this.settings = this.getSettings();
 
         this.mode = this.settings.get_int('mode'); // default mode
 
