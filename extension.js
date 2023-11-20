@@ -2,7 +2,7 @@ import { default as Clutter } from 'gi://Clutter';
 import { default as St } from 'gi://St';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import { default as Gio } from 'gi://Gio';
-const Mainloop = imports.mainloop; // still using legacy imports (GNOME Shell < 45), but no new method exists for this import!
+import GLib from 'gi://GLib';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 export default class HardDiskLEDExtension extends Extension {
@@ -201,11 +201,15 @@ export default class HardDiskLEDExtension extends Extension {
         this.button.set_child(this.layoutManager);
 
         Main.panel._rightBox.insert_child_at_index(this.button, 0);
-        this.timeout = Mainloop.timeout_add_seconds(this.refreshTime, this.parseStat.bind(this));
+        this.timeout = GLib.timeout_add(
+            GLib.PRIORITY_DEFAULT, 
+            this.refreshTime, 
+            () => this.parseStat(true)
+        );
     }
 
     disable() {
-        Mainloop.source_remove(this.timeout);
+        GLib.source_remove(this.timeout);
         this.timeout = null;
         Main.panel._rightBox.remove_child(this.button);
         this.button.destroy();
