@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 export default class HardDiskLEDExtension extends Extension {
-    refreshTime = 2.0;
+    refreshTime = 2.0*200;
 
     ledThreshold = 500000;
     ledMinThreshold = 100000;
