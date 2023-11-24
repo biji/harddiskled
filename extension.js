@@ -22,19 +22,11 @@ export default class HardDiskLEDExtension extends Extension {
     layoutManager = null;
     ioSpeedStaticIcon = null;
     ioSpeedIcon = null;
-    byteArrayToString = null;
 
     init() {
         this.cur = 0;
         this.lastCount = 0;
 
-        if (global.TextDecoder) {
-            // available in gjs >= 1.70 (GNOME Shell >= 42)
-            this.byteArrayToString = (new TextDecoder().decode);
-        } else {
-            // gjs-specific, imports.byteArray is still available in (GNOME Shell 45 >=) but discouraged!
-            this.byteArrayToString = imports.byteArray.toString;
-        }
     }
 
     changeMode() {
@@ -51,7 +43,7 @@ export default class HardDiskLEDExtension extends Extension {
             let input_file = Gio.file_new_for_path('/proc/diskstats');
 
             let [, contents, _etag] = input_file.load_contents(null);
-            contents = this.byteArrayToString(contents);
+            contents = new TextDecoder().decode(contents);
             let lines = contents.split('\n');
 
             let count = 0;
