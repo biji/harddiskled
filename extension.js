@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 export default class HardDiskLEDExtension extends Extension {
-    refreshTime = 2.0*200;
+    refreshTime = 2.0; // in seconds, speed displayed also /s
 
     ledThreshold = 500000;
     ledMinThreshold = 100000;
@@ -201,9 +201,10 @@ export default class HardDiskLEDExtension extends Extension {
         this.button.set_child(this.layoutManager);
 
         Main.panel._rightBox.insert_child_at_index(this.button, 0);
+        // the monotonic time, in microseconds
         this.timeout = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT, 
-            this.refreshTime, 
+            this.refreshTime * 1000, 
             () => this.parseStat(true)
         );
     }
