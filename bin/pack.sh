@@ -1,2 +1,2 @@
 glib-compile-schemas schemas/
-gnome-extensions pack -o dist/
+gnome-extensions pack --force -o dist/
