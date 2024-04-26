@@ -185,9 +185,9 @@ export default class HardDiskLEDExtension extends Extension {
             style_class: 'harddiskled-icon'
         });
 
-        this.layoutManager.add(this.ioSpeedStaticIcon);
-        this.layoutManager.add(this.ioSpeedIcon);
-        this.layoutManager.add(this.ioSpeed);
+        this.layoutManager.add_child(this.ioSpeedStaticIcon);
+        this.layoutManager.add_child(this.ioSpeedIcon);
+        this.layoutManager.add_child(this.ioSpeed);
         this.button.connect('button-press-event', this.changeMode.bind(this));
 
         this.button.set_child(this.layoutManager);
@@ -202,8 +202,10 @@ export default class HardDiskLEDExtension extends Extension {
     }
 
     disable() {
-        GLib.source_remove(this.timeout);
-        this.timeout = null;
+        if (this.timeout) {
+            GLib.source_remove(this.timeout);
+            this.timeout = null;
+        }
         Main.panel._rightBox.remove_child(this.button);
         this.button.destroy();
         this.settings = this.button = this.layoutManager = this.ioSpeedStaticIcon = this.ioSpeed = this.ioSpeedIcon = null;
