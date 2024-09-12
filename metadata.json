@@ -4,7 +4,7 @@
   "name": "Harddisk LED",
   "settings-schema": "org.gnome.shell.extensions.harddiskled",
   "shell-version": [
-    "46"
+    "46", "47"
   ],
   "url": "https://github.com/biji/harddiskled",
   "uuid": "harddiskled@bijidroid.gmail.com",
