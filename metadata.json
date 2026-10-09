@@ -3,13 +3,8 @@
   "description": "Show harddisk activity (IO speed read/write and LED). Click to change led size",
   "name": "Harddisk LED",
   "settings-schema": "org.gnome.shell.extensions.harddiskled",
-  "shell-version": [
-    "46",
-    "47",
-    "48",
-    "49"
-  ],
+  "shell-version": ["48", "49", "50", "51"],
   "url": "https://github.com/biji/harddiskled",
   "uuid": "harddiskled@bijidroid.gmail.com",
-  "version": 40
+  "version": 41
 }
